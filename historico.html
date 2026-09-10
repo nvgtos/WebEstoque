@@ -9,25 +9,31 @@
 <body>
     <nav id="sidebar">
         <div id="sidebar-content">
-            <h1 id="navbar-title" >WebEstoque</h1>
+            <div id="sidebar-top">
+                <button id="sidebar-btn">
+                    <img id="table_rows_white" src="images/table_rows_white.svg" alt="">
+                </button>
+                <span id="sidebar-title" ><strong>WebEstoque</strong></span>  
+            </div>
+
             <ul id="sidebar-items">
                 <li class="side-item">
                     <a href="adicionar-produto.html" draggable="false">
-                        <img src="images/add_product_white.svg" alt="" srcset="">
+                        <img class="side-item-img" src="images/add_product_white.svg" alt="" srcset="">
                         <span class="item-name">Adicionar Produto</span>
                     </a>
                 </li>
 
                 <li class="side-item">
                     <a href="produtos.html" draggable="false">
-                        <img src="images/view_in_box_white.svg" alt="" srcset="">
+                        <img class="side-item-img" src="images/view_in_box_white.svg" alt="" srcset="">
                         <span class="item-name">Produtos</span>
                     </a>
                 </li>
 
                 <li class="side-item active">
                     <a href="historico.html" draggable="false">
-                        <img src="images/hisotry_white.svg" alt="" srcset="">
+                        <img class="side-item-img" src="images/hisotry_white.svg" alt="" srcset="">
                         <span class="item-name">Histórico</span>
                     </a>
                 </li>
@@ -44,5 +50,9 @@
             <h1>Histórico</h1>
         </div>
     </main>
+
+    <!-- JAVASCRIPT -->
+    <script src="script.js"></script>
+    
 </body>
 </html>

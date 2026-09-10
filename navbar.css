@@ -1,0 +1,78 @@
+/* NAVBAR */
+#sidebar-title {
+    color: var(--white);
+    font-size: 25px;
+    padding-left: 20px;
+}
+
+#table_rows_white {
+    width: 25px;
+    height: 25px;
+}
+
+#sidebar-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px;
+}
+
+
+#sidebar-btn {
+    all: unset;
+    cursor: pointer;
+    
+}
+
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100vh;
+    background-color: var(--blue2);
+}
+
+#sidebar-items {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.side-item {
+    /* padding: 25px 20px; */
+    cursor: pointer;
+}
+
+
+
+.side-item a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--white);
+    padding: 20px;
+}
+
+.side-item a .side-item-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+}
+
+#sidebar .item-name {
+    font-size: 18px;
+}
+
+/* Interações*/
+.side-item.active {
+    background-color: #263c4e;
+}
+
+.side-item:hover:not(.active) {
+    background-color: #314D65;
+    transition: 0.3s;
+}
