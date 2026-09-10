@@ -174,6 +174,15 @@ p.homepage-text {
     font-size: 18px;
 }
 
+.side-item.active {
+    background-color: #263c4e;
+}
+
+.side-item:hover:not(.active) {
+    background-color: #314D65;
+    transition: 0.3s;
+}
+
 /* ========================= */
 /* SIDEBAR FECHADA */
 /* ========================= */
