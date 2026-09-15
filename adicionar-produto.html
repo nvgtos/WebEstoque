@@ -9,14 +9,14 @@
 <body class="add-product-body">
     <!-- SIDEBAR -->
     <nav id="sidebar">
-        <div id="sidebar-top">
+        <div class="sidebar-top">
             <button id="sidebar-btn" type="button">
                 <img id="table_rows_white" src="images/table_rows_white.svg" alt="">
             </button>
-            <a href="index.html" id="sidebar-title" ><strong>WebEstoque</strong></a>  
+            <a href="index.html" class="sidebar-title" ><strong>WebEstoque</strong></a>  
         </div>
 
-        <ul id="sidebar-items">
+        <ul class="sidebar-items">
             <li class="side-item active">
                 <a href="adicionar-produto.html" draggable="false">
                     <img class="side-item-img" src="images/add_product_white.svg" alt="" srcset="">
@@ -40,11 +40,14 @@
         </ul>
     </nav>
 
+    <!-- OVERLAY -->
+    <div id="sidebar-overlay"></div>
+
     <!-- CONTEUDO PRINCIPAL -->
     <main id="addProductMain">
         <div class="form-container">
             <form class="product-form">
-                <div class="form-title">
+                <div class="form-header">
                     <h1>Adicionar Produto</h1> 
                 </div>
 
@@ -63,7 +66,7 @@
                     <input class="form-input" type="number" name="amount" id="amount">
                 </div>
 
-                <div class="button-conteiner">
+                <div class="btn-container">
                     <button class="form-btn" type="button">Adicionar</button>
                 </div>
             </form>
@@ -72,6 +75,7 @@
 
     <!-- JAVASCRIPT -->
     <script src="script.js"></script>
+    <script src="addProd.js"></script>
 
     
 </body>
