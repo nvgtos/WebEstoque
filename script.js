@@ -16,7 +16,7 @@ sidebarBtn.addEventListener("click", () => {
         sidebarOverlay.classList.add("active");
     }
 });
-// Fecha a sidebar ao clicar fora dela
+
 sidebarOverlay.addEventListener("click", () => {
     sidebar.classList.add("closed");
     sidebarOverlay.classList.remove("active");
@@ -133,7 +133,8 @@ if (productsList) {
                         </span>
 
                         <span class="product-amount">
-                            Quantidade: <strong>${product.amount}</strong>
+                            Quantidade: 
+                            <strong>${product.amount === 0 ? "Sem Estoque" : product.amount}</strong>
                         </span>
                     </div>
                 </div>
@@ -146,11 +147,19 @@ if (productsList) {
                         Editar
                     </button>
 
+
                     <button
-                        class="product-btn delete-btn"
+                        class="product-btn remove-btn"
                         type="button"
                         data-id="${product.id}">
                         Retirar
+                    </button>
+
+                    <button
+                        class="product-btn trash-btn"
+                        type="button"
+                        data-id="${product.id}">
+                        <img class="trashcan-img" src="images/trashcan_white.svg">
                     </button>
                 </div>
             `;
@@ -185,7 +194,6 @@ function updateSummary() {
 }
 
 // EDITAR PRODUTO
-
 document.addEventListener("click", function(event) {
     if (!event.target.classList.contains("edit-btn")) {
         return;
@@ -266,3 +274,86 @@ document.addEventListener("click", function(event) {
     alert("Produto atualizado com sucesso!");
     this.location.reload();
 });
+
+// RETIRAR PRODUTO
+document.addEventListener("click", function(event) {
+    if (!event.target.classList.contains("remove-btn")) {
+        return;
+    }
+
+    const id = Number(event.target.dataset.id);
+    const products = getProducts();
+
+    const product = products.find(function(product) {
+        return product.id === id;
+    });
+
+    if (!product) {
+        return;
+    }
+
+    let amountToRemove;
+
+    while (true){
+        const input = prompt(
+            "Produto: " + product.name + 
+            " \n" + 
+            "Quantidade atual: " + product.amount +
+            "\n\nQuantas unidades deseja retirar?",
+        );
+
+        if (input === null) {
+            return;
+        }
+
+        amountToRemove = Number(input);
+        if (!isNaN(amountToRemove) 
+            && Number.isInteger(amountToRemove) 
+            && amountToRemove > 0 
+            && amountToRemove <= product.amount
+        ) {
+            break;
+        }
+
+        if (!isNaN(amountToRemove) 
+            && Number.isInteger(amountToRemove) 
+            && amountToRemove > product.amount
+        ) {
+            alert("Quantidade insuficiente para retirada.");
+        } else {
+            alert("Digite um número válido.");
+        }
+    }
+    
+    product.amount -= amountToRemove;
+    saveProducts(products);
+    alert(amountToRemove + " Unidade(s) retirada(s) com sucesso!");
+    this.location.reload();
+
+});
+
+// EXCLUIR PRODUTO
+document.addEventListener("click", function(event) {
+    const trashButton = event.target.closest(".trash-btn");
+    if (!trashButton){
+        return;
+    }
+
+    const id = Number(trashButton.dataset.id);
+    const removeItem = confirm(
+        "Deseja excluir este produto?"
+    );
+
+    if (!removeItem) {
+        return;
+    }
+
+    let products = getProducts();
+    products = products.filter(function (product) {
+        return product.id !== id;
+    });
+
+    saveProducts(products);
+    this.location.reload();
+});
+

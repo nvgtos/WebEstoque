@@ -484,11 +484,22 @@ p.home-text {
     background-color: #1F456A;
 }
 
-.delete-btn {
+.remove-btn {
     background-color: #a53737;
 }
 
-.delete-btn:hover {
+.remove-btn:hover {
+    background-color: #852c2c;
+}
+
+.trash-btn {
+    padding: 10px 13px;
+    display: flex;
+    justify-content: center;
+    background-color: #a53737;
+}
+
+.trash-btn:hover {
     background-color: #852c2c;
 }
 
