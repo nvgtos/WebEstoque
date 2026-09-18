@@ -1,436 +1,425 @@
-    // SIDEBAR
-    const sidebar = document.getElementById("sidebar");
-    const sidebarBtn = document.getElementById("sidebar-btn");
-    const sidebarOverlay = document.getElementById("sidebar-overlay");
+// SIDEBAR
+const sidebar = document.getElementById("sidebar");
+const sidebarBtn = document.getElementById("sidebar-btn");
+const sidebarOverlay = document.getElementById("sidebar-overlay");
 
-    if (!sidebar.classList.contains("closed")) {
+if (!sidebar.classList.contains("closed")) {
+    sidebarOverlay.classList.add("active");
+}
+
+sidebarBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("closed");
+
+    if (sidebar.classList.contains("closed")) {
+        sidebarOverlay.classList.remove("active");
+    } else {
         sidebarOverlay.classList.add("active");
     }
+});
 
-    sidebarBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("closed");
+sidebarOverlay.addEventListener("click", () => {
+    sidebar.classList.add("closed");
+    sidebarOverlay.classList.remove("active");
+});
 
-        if (sidebar.classList.contains("closed")) {
-            sidebarOverlay.classList.remove("active");
-        } else {
-            sidebarOverlay.classList.add("active");
+
+// BANCO DE DADOS DOS PRODUTOS
+const STORAGE_KEY = "webEstoqueProducts";
+const HISTORY_KEY = "webEstoqueHistory";
+
+function getProducts() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function saveProducts(products) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+}
+
+function getHistory(){
+    return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+}
+
+function saveHistory(history) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+}
+
+function addHistory(type, product, amount) {
+    const history = getHistory();
+
+    const historyItem = {
+        id: Date.now(),
+        type: type,
+        product: product,
+        amount: amount,
+        date: new Date().toISOString()
+    };
+
+    history.unshift(historyItem);
+    saveHistory(history);
+}
+
+// FORMULARIO ADICIONAR PRODUTO
+const productForm = document.querySelector(".product-form");
+
+if (productForm) {
+    const productInput = document.getElementById("product");
+    const priceInput = document.getElementById("price");
+    const amountInput = document.getElementById("amount");
+    const addButton = document.getElementById("formBtn");
+
+    addButton.addEventListener("click", function () {
+        const name = productInput.value.trim();
+        const price = Number(priceInput.value);
+        const amount = Number(amountInput.value);
+
+        if (name === "") {
+            alert("Digite o nome do produto.");
+            productInput.focus();
+            return;
         }
-    });
 
-    sidebarOverlay.addEventListener("click", () => {
-        sidebar.classList.add("closed");
-        sidebarOverlay.classList.remove("active");
-    });
+        if (isNaN(price) || price <= 0) {
+            alert("Digite um preço válido.");
+            priceInput.focus();
+            return;
+        }
 
+        if (isNaN(amount) || amount <= 0) {
+            alert("Digite uma quantidade válida.");
+            amountInput.focus();
+            return;
+        }
 
-    // BANCO DE DADOS DOS PRODUTOS
-    const STORAGE_KEY = "webEstoqueProducts";
-    const HISTORY_KEY = "webEstoqueHistory";
+        const products = getProducts();
 
-    function getProducts() {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    }
+        const productExist = products.some(function (product) {
+            return product.name.toLowerCase() === name.toLowerCase();
+        });
 
-    function saveProducts(products) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-    }
+        if (productExist) {
+            alert("Este produto já está cadastrado no estoque. \nPara editar informações de um produto existente ou adicionar mais produtos, utilize a aba Produtos");
+            productInput.focus();
+            return;
+        }
 
-    function getHistory(){
-        return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
-    }
-
-    function saveHistory(history) {
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-    }
-
-    function addHistory(type, product, amount) {
-        const history = getHistory();
-
-        const historyItem = {
+        const product = {
             id: Date.now(),
-            type: type,
-            product: product,
-            amount: amount,
-            date: new Date().toDateString()
+            name: name,
+            price: price,
+            amount: amount
         };
 
-        history.unshift(historyItem);
-        saveHistory(history);
-    }
+        products.unshift(product);
+        saveProducts(products);
 
-    // FORMULARIO ADICIONAR PRODUTO
-    const productForm = document.querySelector(".product-form");
+        addHistory("added", product.name, product.amount);
 
-    if (productForm) {
-        const productInput = document.getElementById("product");
-        const priceInput = document.getElementById("price");
-        const amountInput = document.getElementById("amount");
-        const addButton = document.getElementById("formBtn");
+        productForm.reset();
+        alert("Produto adicionado com sucesso!");
+    });
+}
 
-        addButton.addEventListener("click", function () {
-            const name = productInput.value.trim();
-            const price = Number(priceInput.value);
-            const amount = Number(amountInput.value);
+// FORMARTAR MOEDA PARA BRL
+function formatBRL(value) {
+    return value.toLocaleString("pt-BR", {
+        style: "currency", currency: "BRL"
+    });
+}
 
-            if (name === "") {
-                alert("Digite o nome do produto.");
-                productInput.focus();
-                return;
-            }
+// EXIBIR PRODUTOS
+const productsList = document.querySelector(".products-list");
 
-            if (isNaN(price) || price <= 0) {
-                alert("Digite um preço válido.");
-                priceInput.focus();
-                return;
-            }
+if (productsList) {
+    const products = getProducts();
+    
+    productsList.innerHTML = "";
 
-            if (isNaN(amount) || amount <= 0) {
-                alert("Digite uma quantidade válida.");
-                amountInput.focus();
-                return;
-            }
+    if (products.length === 0) {
+        productsList.innerHTML = `
+            <div class="empty-products">
+                <h2>Nenhum produto cadastrado</h2>
+                <p>Adicione um produto para começar seu estoque.</p>
+            </div>
+        `;
+    } else {
+        products.forEach(function (product) {
+            const productCard = document.createElement("div");
+            productCard.classList.add("product-card");
 
-            const products = getProducts();
+            productCard.innerHTML = `
+                <div class="product-info">
+                    <h2 class="product-name">${product.name}</h2>
 
-            const productExist = products.some(function (product) {
-                return product.name.toLowerCase() === name.toLowerCase();
-            });
+                    <div class="product-details">
+                        <span class="product-price">
+                            Preço: <strong>${formatBRL(product.price)}</strong>
+                        </span>
 
-            if (productExist) {
-                alert("Este produto já está cadastrado no estoque. \nEdite as informações como nome e preço de um produto existente na aba Produtos.");
-                productInput.focus();
-                return;
-            }
+                        <span class="product-amount">
+                            Quantidade: 
+                            <strong>${product.amount === 0 ? "Sem Estoque" : product.amount}</strong>
+                        </span>
+                    </div>
+                </div>
 
-            const product = {
-                id: Date.now(),
-                name: name,
-                price: price,
-                amount: amount
-            };
+                <div class="product-actions">
+                    <button class="product-btn edit-btn" type="button" data-id="${product.id}">
+                        Editar
+                    </button>
 
-            products.unshift(product);
-            saveProducts(products);
+                    <button class="product-btn remove-btn" type="button" data-id="${product.id}">
+                        Retirar
+                    </button>
 
-            addHistory("added", product.name, product.amount);
-
-            productForm.reset();
-
-            alert("Produto adicionado com sucesso!");
-        });
-    }
-
-    // FORMARTAR MOEDA PARA BRL
-    function formatBRL(value) {
-        return value.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
-    }
-
-    // EXIBIR PRODUTOS
-    const productsList = document.querySelector(".products-list");
-
-    if (productsList) {
-        const products = getProducts();
-        
-        productsList.innerHTML = "";
-
-        if (products.length === 0) {
-            productsList.innerHTML = `
-                <div class="empty-products">
-                    <h2>Nenhum produto cadastrado</h2>
-                    <p>Adicione um produto para começar seu estoque.</p>
+                    <button class="product-btn trash-btn" type="button" data-id="${product.id}">
+                        <img class="trashcan-img" src="images/trashcan_white.svg">
+                    </button>
                 </div>
             `;
-        } else {
-            products.forEach(function (product) {
-                const productCard = document.createElement("div");
-                productCard.classList.add("product-card");
+            
+            productsList.appendChild(productCard);
+        });
+    }
+    updateSummary();
+}
 
-                productCard.innerHTML = `
-                    <div class="product-info">
-                        <h2 class="product-name">${product.name}</h2>
+// SUMARIO
+function updateSummary() {
+    const totalProductsElement = document.querySelector(".summary-card:nth-child(1) .summary-value");
+    const totalValueElement = document.querySelector(".summary-card:nth-child(2) .summary-value");
 
-                        <div class="product-details">
-                            <span class="product-price">
-                                Preço: <strong>${formatBRL(product.price)}</strong>
-                            </span>
-
-                            <span class="product-amount">
-                                Quantidade: 
-                                <strong>${product.amount === 0 ? "Sem Estoque" : product.amount}</strong>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="product-actions">
-                        <button class="product-btn edit-btn" type="button" data-id="${product.id}">
-                            Editar
-                        </button>
-
-                        <button class="product-btn remove-btn" type="button" data-id="${product.id}">
-                            Retirar
-                        </button>
-
-                        <button class="product-btn trash-btn" type="button" data-id="${product.id}">
-                            <img class="trashcan-img" src="images/trashcan_white.svg">
-                        </button>
-                    </div>
-                `;
-                
-                productsList.appendChild(productCard);
-            });
-        }
-        updateSummary();
+    if (!totalProductsElement || !totalValueElement) {
+        return;
     }
 
-    // SUMARIO
-    function updateSummary() {
-        const totalProductsElement = document.querySelector(".summary-card:nth-child(1) .summary-value");
-        const totalValueElement = document.querySelector(".summary-card:nth-child(2) .summary-value");
+    const products = getProducts();
 
-        if (!totalProductsElement || !totalValueElement) {
-            return;
-        }
+    const totalProducts = products.length;
 
-        const products = getProducts();
+    const totalValue = products.reduce(function (total, product) {
+        return total + (product.price * product.amount);
+    }, 0);
 
-        const totalAmount = products.reduce(function (total, product) {
-            return total + product.amount;
-        }, 0);
+    totalProductsElement.textContent = totalProducts;
+    totalValueElement.textContent = formatBRL(totalValue);
+}
 
-        const totalValue = products.reduce(function (total, product) {
-            return total + (product.price * product.amount);
-        }, 0);
-
-        totalProductsElement.textContent = totalAmount;
-        totalValueElement.textContent = formatBRL(totalValue);
+// EDITAR PRODUTO
+document.addEventListener("click", function(event) {
+    if (!event.target.classList.contains("edit-btn")) {
+        return;
     }
 
-    // EDITAR PRODUTO
-    document.addEventListener("click", function(event) {
-        if (!event.target.classList.contains("edit-btn")) {
-            return;
-        }
+    const id = Number(event.target.dataset.id);
+    const products = getProducts();
 
-        const id = Number(event.target.dataset.id);
-        const products = getProducts();
-
-        const product = products.find(function(product) {
-            return product.id === id;
-        });
-
-        if (!product) {
-            return;
-        }
-
-        let newName;
-        while (true){
-            newName = prompt(
-                "Nome do produto",
-                product.name
-            );
-
-            if (newName === null) {
-                return;
-            }
-
-            if (newName.trim() !== "") {
-                break;
-            }
-            alert("Digite um nome válido.");
-        }
-
-        let newPrice;
-        let price;
-        while (true) {
-            newPrice = prompt(
-                "Preço do produto:",
-                product.price
-            );
-
-            if (newPrice === null) {
-                return;
-            }
-
-            price = Number(newPrice);
-            if (!isNaN(price) && price > 0) {
-                break;
-            }
-
-            alert("Digite um preço válido.");
-        }
-
-        let addAmount;
-        let amountToAdd;
-        while (true) {
-            addAmount = prompt(
-                "Quantidade atual: " + product.amount + "\n\n" + "Quantas unidades deseja adicionar? \n(Mantenha o campo vazio caso não queira adicionar.)"
-            );
-
-            if (addAmount === null) {
-                return;
-            }
-
-            amountToAdd = Number(addAmount);
-            if (!isNaN(amountToAdd) && amountToAdd >= 0){
-                break;
-            }
-
-            alert("Digite uma quantidade válida.");
-        }
-
-        product.name = newName.trim();
-        product.price = price;
-        product.amount += amountToAdd;
-
-        saveProducts(products);
-
-        if (amountToAdd > 0) {
-            addHistory("added", product.name, amountToAdd);
-        }
-
-        alert("Produto atualizado com sucesso!");
-        this.location.reload();
+    const product = products.find(function(product) {
+        return product.id === id;
     });
 
-    // RETIRAR PRODUTO
-    document.addEventListener("click", function(event) {
-        if (!event.target.classList.contains("remove-btn")) {
-            return;
-        }
+    if (!product) {
+        return;
+    }
 
-        const id = Number(event.target.dataset.id);
-        const products = getProducts();
-
-        const product = products.find(function(product) {
-            return product.id === id;
-        });
-
-        if (!product) {
-            return;
-        }
-
-        let amountToRemove;
-
-        while (true){
-            const input = prompt(
-                "Produto: " + product.name + 
-                " \n" + 
-                "Quantidade atual: " + product.amount +
-                "\n\nQuantas unidades deseja retirar?",
-            );
-
-            if (input === null) {
-                return;
-            }
-
-            amountToRemove = Number(input);
-            if (!isNaN(amountToRemove) 
-                && Number.isInteger(amountToRemove) 
-                && amountToRemove > 0 
-                && amountToRemove <= product.amount
-            ) {
-                break;
-            }
-
-            if (!isNaN(amountToRemove) 
-                && Number.isInteger(amountToRemove) 
-                && amountToRemove > product.amount
-            ) {
-                alert("Quantidade insuficiente para retirada.");
-            } else {
-                alert("Digite um número válido.");
-            }
-        }
-        
-        product.amount -= amountToRemove;
-        saveProducts(products);
-
-        addHistory("removed", product.name, amountToRemove);
-
-        alert(amountToRemove + " Unidade(s) retirada(s) com sucesso!");
-        this.location.reload();
-
-    });
-
-    // EXCLUIR PRODUTO
-    document.addEventListener("click", function(event) {
-        const trashButton = event.target.closest(".trash-btn");
-        if (!trashButton){
-            return;
-        }
-
-        const id = Number(trashButton.dataset.id);
-        const removeItem = confirm(
-            "Deseja excluir este produto?"
+    let newName;
+    while (true){
+        newName = prompt(
+            "Nome do produto",
+            product.name
         );
 
-        if (!removeItem) {
+        if (newName === null) {
             return;
         }
 
-        let products = getProducts();
-        products = products.filter(function (product) {
-            return product.id !== id;
-        });
+        if (newName.trim() !== "") {
+            break;
+        }
+        alert("Digite um nome válido.");
+    }
 
-        saveProducts(products);
-        this.location.reload();
+    let newPrice;
+    let price;
+    while (true) {
+        newPrice = prompt(
+            "Preço do produto:",
+            product.price
+        );
+
+        if (newPrice === null) {
+            return;
+        }
+
+        price = Number(newPrice);
+        if (!isNaN(price) && price > 0) {
+            break;
+        }
+
+        alert("Digite um preço válido.");
+    }
+
+    let addAmount;
+    let amountToAdd;
+    while (true) {
+        addAmount = prompt(
+            "Quantidade atual: " + product.amount + "\n\n" + "Quantas unidades deseja adicionar? \n(Mantenha o campo vazio caso não queira adicionar.)"
+        );
+
+        if (addAmount === null) {
+            return;
+        }
+
+        amountToAdd = Number(addAmount);
+        if (!isNaN(amountToAdd) && amountToAdd >= 0){
+            break;
+        }
+
+        alert("Digite uma quantidade válida.");
+    }
+
+    product.name = newName.trim();
+    product.price = price;
+    product.amount += amountToAdd;
+
+    saveProducts(products);
+
+    if (amountToAdd > 0) {
+        addHistory("added", product.name, amountToAdd);
+    }
+
+    alert("Produto atualizado com sucesso!");
+    this.location.reload();
+});
+
+// RETIRAR PRODUTO
+document.addEventListener("click", function(event) {
+    if (!event.target.classList.contains("remove-btn")) {
+        return;
+    }
+
+    const id = Number(event.target.dataset.id);
+
+    const products = getProducts();
+    const product = products.find(function(product) {
+        return product.id === id;
     });
 
-    // HISTORICO
-    const historyList = document.querySelector(".history-list");
+    if (!product) {
+        return;
+    }
 
-    if (historyList) {
-        const history = getHistory();
+    let amountToRemove;
+    while (true){
+        const input = prompt(
+            "Produto: " + product.name + 
+            " \n" + 
+            "Quantidade atual: " + product.amount +
+            "\n\nQuantas unidades deseja retirar?",
+        );
 
-        historyList.innerHTML = "";
+        if (input === null) {
+            return;
+        }
 
-        if (history.length === 0) {
-            historyList.innerHTML = `
-                <div class="empty-history">
-                    <h2>Histórico vazio</h2>
-                    <p>Adicione um produto para começar seu estoque.</p>
-                </div>
-            `;
+        amountToRemove = Number(input);
+        if (!isNaN(amountToRemove) 
+            && Number.isInteger(amountToRemove) 
+            && amountToRemove > 0 
+            && amountToRemove <= product.amount
+        ) {
+            break;
+        }
+
+        if (amountToRemove > product.amount) {
+            alert("Quantidade insuficiente para retirada.");
         } else {
-            history.forEach(function(item) {
-                const historyCard = document.createElement("div");
-                historyCard.classList.add("history-card");
-
-                const isAdded = item.type === "added";
-                const title = isAdded ? "Produto adicionado" : "Produto retirado";
-                const titleColor = isAdded ? "history-added" : "history-removed";
-
-                const date = new Date(item.date);
-                const formattedDate = date.toLocaleDateString("pt-BR");
-                
-                const formattedTime = date.toLocaleDateString("pt-BR", {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                });
-
-                historyCard.innerHTML = `
-                    <div class="history-info">
-                            <h2 class="history-product ${titleColor}">
-                                ${title}<span>: ${item.product}</span>
-                            </h2>
-
-                            <div class="history-details">
-                            
-                                <span class="history-amount">Quantidade: 
-                                <strong>${item.amount}</strong>
-                                </span>
-                                
-                                <span class="history-date">Data: <strong>${formattedDate}</span>
-                            </div>
-                        </div>
-                `;
-
-                historyList.appendChild(historyCard);
-
-            });
+            alert("Digite um número válido.");
         }
     }
+    
+    product.amount -= amountToRemove;
+    saveProducts(products);
+
+    addHistory("removed", product.name, amountToRemove);
+
+    alert(amountToRemove + " Unidade(s) retirada(s) com sucesso!");
+    this.location.reload();
+
+});
+
+// EXCLUIR PRODUTO
+document.addEventListener("click", function(event) {
+    const trashButton = event.target.closest(".trash-btn");
+    if (!trashButton){
+        return;
+    }
+
+    const id = Number(trashButton.dataset.id);
+    const removeItem = confirm(
+        "Deseja excluir este produto?"
+    );
+
+    if (!removeItem) {
+        return;
+    }
+
+    let products = getProducts();
+    products = products.filter(function (product) {
+        return product.id !== id;
+    });
+
+    saveProducts(products);
+    this.location.reload();
+});
+
+// HISTORICO
+const historyList = document.querySelector(".history-list");
+
+if (historyList) {
+    const history = getHistory();
+
+    historyList.innerHTML = "";
+
+    if (history.length === 0) {
+        historyList.innerHTML = `
+            <div class="empty-history">
+                <h2>Histórico vazio</h2>
+                <p>Adicione um produto para começar seu estoque.</p>
+            </div>
+        `;
+    } else {
+        history.forEach(function(item) {
+            const historyCard = document.createElement("div");
+            historyCard.classList.add("history-card");
+
+            const isAdded = item.type === "added";
+            const title = isAdded ? "Produto adicionado" : "Produto retirado";
+            const titleColor = isAdded ? "history-added" : "history-removed";
+
+            const date = new Date(item.date);
+            const formattedDate = date.toLocaleDateString("pt-BR");
+            const formattedTime = date.toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+
+            historyCard.innerHTML = `
+                <div class="history-info">
+                        <h2 class="history-product ${titleColor}">
+                            ${title}<span>: ${item.product}</span>
+                        </h2>
+
+                        <div class="history-details">
+                            <span class="history-amount">Quantidade: <strong>${item.amount}</strong>
+                            </span>
+                            
+                            <span class="history-date">Data: <strong>${formattedDate} às 
+                            ${formattedTime}</span>
+                        </div>
+                    </div>
+            `;
+
+            historyList.appendChild(historyCard);
+        });
+    }
+}

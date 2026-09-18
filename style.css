@@ -85,7 +85,7 @@ p.home-text {
     flex-direction: column;
 }
 
-#home-footer-content {
+.home-footer-content {
     font-size: 13px;
     display: flex;
     flex-direction: column;
