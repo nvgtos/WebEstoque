@@ -509,7 +509,7 @@ p.home-text {
 
 .products-summary {
     display: flex;
-    grid-template-columns: repeat(2, 1fr);
+    /* grid-template-columns: repeat(2, 1fr); */
     gap: 18px;
     margin-bottom: 30px;
 }
@@ -542,7 +542,113 @@ p.home-text {
     color: var(--black);
     font-size: 28px;
     font-weight: 600;
+    overflow-wrap: anywhere;
 }
+
+/* HISTÓRICO */
+#historyMain {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 100vh;
+    padding-inline: 250px;
+}
+
+.history-container {
+    background-color: #a0b7cc;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    box-shadow: 0 0 15px rgb(55, 65, 64, 0.4);
+}
+
+.history-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.history-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background-color: rgb(231, 238, 244, 50%);
+    border-radius: 4px;
+}
+
+.history-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    border-bottom: 3px inset rgb(0, 0, 0, 31%);
+
+    width: 100%;
+    padding: 22px 25px;
+}
+
+.empty-history {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 5px;
+}
+
+.empty-history h2, .empty-history p {
+    color: var(--black);
+}
+
+.empty-history h2 {
+    font-size: 25px;
+    font-weight: 580;
+}
+
+.empty-history p {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.history-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+.history-details {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    color: var(--blue4);
+    font-size: 17px;
+}
+
+.history-details strong {
+    color: var(--black);
+    font-weight: 600;
+}
+
+.history-added {
+    color: rgb(35, 150, 35);
+}
+
+.history-removed {
+    color: rgb(209, 50, 50);
+}
+
+.history-info span {
+    color: var(--black);
+}
+
+
 
 
 
@@ -655,20 +761,52 @@ p.home-text {
         flex-direction: column;
     }
 
-    
+    .summary-card {
+        width: 100%;
+    }
 
     .summary-title {
-    margin-bottom: 8px;
+        margin-bottom: 8px;
 
-    color: var(--blue4);
-    font-size: 23px;
-    font-weight: 500;
+        color: var(--blue4);
+        font-size: 23px;
+        font-weight: 500;
     }
 
     .summary-value {
         color: var(--black);
         font-size: 28px;
         font-weight: 600;
+    }
+
+    /* HISTORICO */
+    #historyMain {
+        padding-inline: 15px;
+    }
+
+    .history-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .history-card {
+        flex-direction: column;
+        padding: 18px;
+        gap: 0;
+    }
+
+    .empty-history h2{
+        font-size: 20px;
+    }
+    
+    .empty-history p{
+        font-size: 12px;
+
+    }
+
+    .history-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
     }
 
 }
@@ -731,11 +869,16 @@ p.home-text {
    ============================== */
 
     #productsMain {
-        padding-inline: 100px;
+        padding-inline: 70px;
     }
 
-    .product-card {
-        padding: 20px;
+    .products-summary {
+        flex-direction: column;
+    }
+
+    /* HISTÓRICO */
+    #historyMain {
+        padding-inline: 70px;
     }
 
 }
