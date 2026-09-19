@@ -60,7 +60,6 @@ function addHistory(type, product, amount) {
 
 // FORMULARIO ADICIONAR PRODUTO
 const productForm = document.querySelector(".product-form");
-
 if (productForm) {
     const productInput = document.getElementById("product");
     const priceInput = document.getElementById("price");
@@ -111,7 +110,6 @@ if (productForm) {
 
         products.unshift(product);
         saveProducts(products);
-
         addHistory("added", product.name, product.amount);
 
         productForm.reset();
@@ -124,6 +122,25 @@ function formatBRL(value) {
     return value.toLocaleString("pt-BR", {
         style: "currency", currency: "BRL"
     });
+}
+
+// SUMARIO
+function updateSummary() {
+    const totalProductsElement = document.querySelector(".summary-card:nth-child(1) .summary-value");
+    const totalValueElement = document.querySelector(".summary-card:nth-child(2) .summary-value");
+
+    if (!totalProductsElement || !totalValueElement) {
+        return;
+    }
+
+    const products = getProducts();
+    const totalProducts = products.length;
+    const totalValue = products.reduce(function (total, product) {
+        return total + (product.price * product.amount);
+    }, 0);
+
+    totalProductsElement.textContent = totalProducts;
+    totalValueElement.textContent = formatBRL(totalValue);
 }
 
 // EXIBIR PRODUTOS
@@ -183,27 +200,6 @@ if (productsList) {
     updateSummary();
 }
 
-// SUMARIO
-function updateSummary() {
-    const totalProductsElement = document.querySelector(".summary-card:nth-child(1) .summary-value");
-    const totalValueElement = document.querySelector(".summary-card:nth-child(2) .summary-value");
-
-    if (!totalProductsElement || !totalValueElement) {
-        return;
-    }
-
-    const products = getProducts();
-
-    const totalProducts = products.length;
-
-    const totalValue = products.reduce(function (total, product) {
-        return total + (product.price * product.amount);
-    }, 0);
-
-    totalProductsElement.textContent = totalProducts;
-    totalValueElement.textContent = formatBRL(totalValue);
-}
-
 // EDITAR PRODUTO
 document.addEventListener("click", function(event) {
     if (!event.target.classList.contains("edit-btn")) {
@@ -239,7 +235,6 @@ document.addEventListener("click", function(event) {
     }
 
     let newPrice;
-    let price;
     while (true) {
         newPrice = prompt(
             "Preço do produto:",
@@ -250,27 +245,26 @@ document.addEventListener("click", function(event) {
             return;
         }
 
-        price = Number(newPrice);
-        if (!isNaN(price) && price > 0) {
+        newPrice = Number(newPrice);
+        if (!isNaN(newPrice) && newPrice > 0) {
             break;
         }
 
         alert("Digite um preço válido.");
     }
 
-    let addAmount;
     let amountToAdd;
     while (true) {
-        addAmount = prompt(
+        amountToAdd = prompt(
             "Quantidade atual: " + product.amount + "\n\n" + "Quantas unidades deseja adicionar? \n(Mantenha o campo vazio caso não queira adicionar.)"
         );
 
-        if (addAmount === null) {
+        if (amountToAdd === null) {
             return;
         }
 
-        amountToAdd = Number(addAmount);
-        if (!isNaN(amountToAdd) && amountToAdd >= 0){
+        amountToAdd = Number(amountToAdd);
+        if (!isNaN(amountToAdd) && Number.isInteger(amountToAdd) && amountToAdd >= 0){
             break;
         }
 
@@ -278,7 +272,7 @@ document.addEventListener("click", function(event) {
     }
 
     product.name = newName.trim();
-    product.price = price;
+    product.price = newPrice;
     product.amount += amountToAdd;
 
     saveProducts(products);
@@ -298,7 +292,6 @@ document.addEventListener("click", function(event) {
     }
 
     const id = Number(event.target.dataset.id);
-
     const products = getProducts();
     const product = products.find(function(product) {
         return product.id === id;
@@ -374,7 +367,6 @@ document.addEventListener("click", function(event) {
 
 // HISTORICO
 const historyList = document.querySelector(".history-list");
-
 if (historyList) {
     const history = getHistory();
 

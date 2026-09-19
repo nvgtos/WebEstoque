@@ -25,13 +25,13 @@ body {
     flex-direction: column;
 }
 
-#home-main {
+.home-main {
     display: flex;
     align-items: center;
     flex: 1;
 }
 
-#home-section {
+.home-section {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -78,7 +78,7 @@ p.home-text {
     background-color: #1F456A;
 }
 
-#home-footer {
+#homeFooter {
     display: flex;
     box-shadow: 0px -6px 15px rgb(0, 0, 0 , 40%);
     background-color: var(--black);
@@ -96,7 +96,7 @@ p.home-text {
 }
 
 /* PAG. ADICIONAR PRODUTO */
-/* NAVBAR */
+/* SIDEBAR */
 #sidebar {
     position: fixed;
     z-index: 1000;
@@ -172,10 +172,6 @@ p.home-text {
     transition: 0.3s;
 }
 
-/* ========================= */
-/* SIDEBAR FECHADA */
-/* ========================= */
-
 #sidebar.closed {
     width: 65px;
     background-color: transparent;
@@ -185,41 +181,22 @@ p.home-text {
     filter: brightness(0.4);
 }
 
-/* Esconde o título */
 #sidebar.closed .sidebar-title, #sidebar.closed .sidebar-items {
     display: none;
 }
 
-/* ==============================
-   OVERLAY DA SIDEBAR
-   ============================== */
-
 #sidebar-overlay {
     position: fixed;
     inset: 0;
-
     background-color: rgba(0, 0, 0, 20%);
-    
     opacity: 0;
     visibility: hidden;
-
 }
 
 #sidebar-overlay.active {
     opacity: 1;
     visibility: visible;
 }
-
-/* Esconde todos os itens */
-/* #sidebar.closed .sidebar-items {
-    display: none;
-} */
-
-/* Mantém o botão centralizado */
-/* #sidebar.closed #sidebar-top {
-    justify-content: flex-start;
-    padding: 20px;
-} */
 
 /* FORMULARIO ADICIONAR PRODUTO */
 #addProductMain {
@@ -228,20 +205,8 @@ p.home-text {
     flex: 1;
     align-items: center;
     min-height: 100vh;
-    padding-inline: 250px;
-    
+    padding-inline: 250px; 
 }
-
-.form-header h1{
-    margin-bottom: 25px;
-    font-size: 2rem;
-    font-weight: 600;
-    color: #374140;
-}
-
-/* ==============================
-   CONTAINER DO FORMULÁRIO
-   ============================== */
 
 .form-container {
     width: 100%;
@@ -252,10 +217,13 @@ p.home-text {
     box-shadow: 0 0 15px rgb(55, 65, 64, 0.4);
 }
 
+.form-header h1{
+    margin-bottom: 25px;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #374140;
+}
 
-/* ==============================
-   FORMULÁRIO
-   ============================== */
 .product-form {
     width: 100%;
 }
@@ -266,19 +234,12 @@ p.home-text {
     margin-bottom: 20px;
 }
 
-/* ==============================
-   LABELS
-   ============================== */
 .label {
     margin-bottom: 7px;
     color: var(--blue4);
     font-size: 20px;
     font-weight: 500;
 }
-
-/* ==============================
-   INPUTS
-   ============================== */
 
 .form-input {
     width: 100%;
@@ -325,10 +286,6 @@ p.home-text {
 
 
 /* PAG. PRODUTOS */
-/* ==============================
-   PÁGINA DE PRODUTOS
-   ============================== */
-
 #productsMain {
     display: flex;
     flex-direction: column;
@@ -338,10 +295,6 @@ p.home-text {
     
 }
 
-/* ==============================
-   CONTAINER DOS PRODUTOS
-   ============================== */
-
 .products-container {
     background-color: #a0b7cc;
     width: 100%;
@@ -350,10 +303,6 @@ p.home-text {
     padding: 30px;
     box-shadow: 0 0 15px rgb(55, 65, 64, 0.4);
 }
-
-/* ==============================
-   CABEÇALHO
-   ============================== */
 
 .products-header {
     display: flex;
@@ -367,23 +316,43 @@ p.home-text {
     color: var(--black);
 }
 
-/* ==============================
-   LISTA DE PRODUTOS
-   ============================== */
+.products-summary {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 110px;
+    padding: 20px 25px;
+    background-color: rgb(231, 238, 244, 50%);
+    border-radius: 4px;
+}
+
+.summary-title {
+    margin-bottom: 8px;
+    color: var(--blue4);
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.summary-value {
+    color: var(--black);
+    font-size: 28px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
 
 .products-list {
     display: flex;
     flex-direction: column;
     gap: 18px;
     background-color: rgb(231, 238, 244, 50%);
-    border-radius: 4px;
-    /* box-shadow: 0 2px 10px rgb(55, 65, 64, 20%); */
-    
+    border-radius: 4px; 
 }
-
-/* ==============================
-   CARD DO PRODUTO
-   ============================== */
 
 .product-card {
     display: flex;
@@ -391,10 +360,8 @@ p.home-text {
     justify-content: space-between;
     gap: 25px;
     border-bottom: 3px inset rgb(0, 0, 0, 31%);
-
     width: 100%;
     padding: 22px 25px;
-
 }
 
 .empty-products {
@@ -418,11 +385,6 @@ p.home-text {
     font-weight: 500;
     font-size: 18px;
 }
-
-
-/* ==============================
-   INFORMAÇÕES
-   ============================== */
 
 .product-info {
     display: flex;
@@ -451,10 +413,6 @@ p.home-text {
     font-weight: 600;
 }
 
-/* ==============================
-   BOTÕES DO PRODUTO
-   ============================== */
-
 .product-actions {
     display: flex;
     align-items: center;
@@ -465,14 +423,11 @@ p.home-text {
 .product-btn {
     border: none;
     cursor: pointer;
-
     padding: 9px 13px;
     border-radius: 4px;
-
     color: var(--white);
     font-size: 16px;
     font-weight: 500;
-
     transition: 0.1s;
 }
 
@@ -503,49 +458,7 @@ p.home-text {
     background-color: #852c2c;
 }
 
-/* ==============================
-   RESUMO DO ESTOQUE
-   ============================== */
-
-.products-summary {
-    display: flex;
-    /* grid-template-columns: repeat(2, 1fr); */
-    gap: 18px;
-    margin-bottom: 30px;
-}
-
-.summary-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    min-height: 110px;
-    padding: 20px 25px;
-
-    background-color: rgb(231, 238, 244, 50%);
-    border-radius: 4px;
-    
-    /* box-shadow: 0 0 15px rgb(55, 65, 64, 20%); */
-}
-
-
-
-.summary-title {
-    margin-bottom: 8px;
-
-    color: var(--blue4);
-    font-size: 18px;
-    font-weight: 500;
-}
-
-.summary-value {
-    color: var(--black);
-    font-size: 28px;
-    font-weight: 600;
-    overflow-wrap: anywhere;
-}
-
-/* HISTÓRICO */
+/* PAG. HISTORICO */
 #historyMain {
     display: flex;
     flex-direction: column;
@@ -589,7 +502,6 @@ p.home-text {
     justify-content: space-between;
     gap: 25px;
     border-bottom: 3px inset rgb(0, 0, 0, 31%);
-
     width: 100%;
     padding: 22px 25px;
 }
@@ -648,20 +560,9 @@ p.home-text {
     color: var(--black);
 }
 
-
-
-
-
-
-
-
-
-/* ========================= /
-/ CELULAR /
-/ ========================= */
+/* RESPONSIVIDADE CELULAR */
 @media (max-width: 767px) {
-
-    #home-section {
+    .home-section {
         flex-direction: column;
         text-align: center;
         margin-top: 20px;
@@ -670,7 +571,7 @@ p.home-text {
         gap: 30px;
     }
 
-    #home-content {
+    .home-content {
         width: 100%;
     }
 
@@ -691,8 +592,6 @@ p.home-text {
         height: 100%;
     }
 
-    
-    /* RESPONSIVIDADE FORMULARIO */
     #addProductMain {
         padding-inline: 15px;
     }
@@ -705,10 +604,6 @@ p.home-text {
         padding: 30px;
     }
 
-    /* RESPONSIVIDADE PAG. PRODUTOS */
-    /* ==============================
-   RESPONSIVIDADE - CELULAR
-   ============================== */
     #productsMain {
         padding-inline: 15px;
     }
@@ -728,12 +623,11 @@ p.home-text {
     }
 
     .empty-products h2{
-        font-size: 20px;
+        font-size: 19px;
     }
     
     .empty-products p{
         font-size: 12px;
-
     }
 
     .product-card {
@@ -767,7 +661,6 @@ p.home-text {
 
     .summary-title {
         margin-bottom: 8px;
-
         color: var(--blue4);
         font-size: 23px;
         font-weight: 500;
@@ -779,7 +672,6 @@ p.home-text {
         font-weight: 600;
     }
 
-    /* HISTORICO */
     #historyMain {
         padding-inline: 15px;
     }
@@ -808,17 +700,11 @@ p.home-text {
         align-items: flex-start;
         gap: 5px;
     }
-
 }
 
-
-/* ========================= /
-/ TABLET /
-/ ========================= */
-
+/* RESPONSIVDADE TABLETS */
 @media (min-width: 768px) and (max-width: 1024px) {
-
-    #home-section {
+    .home-section {
         width: 100%;
         min-height: 100%;
         padding: 30px 40px;
@@ -826,7 +712,7 @@ p.home-text {
         justify-content: space-between;
     }
 
-    #home-content {
+    .home-content {
         max-width: 50%;
     }
 
@@ -849,8 +735,6 @@ p.home-text {
         padding: 9px 14px;
     }
 
-
-    /* RESPONSIVIDADE FORMULARIO */
     #addProductMain {
         padding-inline: 100px;
     }
@@ -863,11 +747,6 @@ p.home-text {
         padding: 30px;
     }
 
-    /* RESPONSIVIDADE PAG PRODUTOS TABLET */
-    /* ==============================
-   RESPONSIVIDADE - TABLET
-   ============================== */
-
     #productsMain {
         padding-inline: 70px;
     }
@@ -876,9 +755,7 @@ p.home-text {
         flex-direction: column;
     }
 
-    /* HISTÓRICO */
     #historyMain {
         padding-inline: 70px;
     }
-
 }
