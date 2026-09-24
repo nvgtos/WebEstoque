@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>WebEstoque</title>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="closed">
+        <div class="sidebar-top">
+            <button id="sidebar-btn" type="button">
+                <img id="table_rows_white" src="images/table_rows_white.svg" alt="">
+            </button>
+            <a href="index.html" class="sidebar-title" ><strong>WebEstoque</strong></a>  
+        </div>
+
+        <ul class="sidebar-items">
+            <li class="side-item">
+                <a href="adicionar-produto.html" draggable="false">
+                    <img class="side-item-img" src="images/add_product_white.svg" alt="" srcset="">
+                    <span class="item-name">Adicionar Produto</span>
+                </a>
+            </li>
+
+            <li class="side-item active">
+                <a href="produtos.html" draggable="false">
+                    <img class="side-item-img" src="images/view_in_box_white.svg" alt="" srcset="">
+                    <span class="item-name">Produtos</span>
+                </a>
+            </li>
+
+            <li class="side-item">
+                <a href="historico.html" draggable="false">
+                    <img class="side-item-img" src="images/hisotry_white.svg" alt="" srcset="">
+                    <span class="item-name">Histórico</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="sidebar-overlay"></div>
+    
+    <!-- CONTEUDO PRINCIPAL -->
+    <main id="productsMain">
+        <div class="products-container">
+            <div class="products-header">
+                <h1>Produtos</h1>
+            </div>
+
+            <div class="products-summary">
+                <div class="summary-card">
+                    <span class="summary-title">Produtos Cadastrados</span>
+                    <span class="summary-value">0</span>
+                </div>
+
+                <div class="summary-card">
+                    <span class="summary-title">Valor Total do Estoque</span>
+                    <span class="summary-value">R$ 0,00</span>
+                </div>
+            </div>
+
+            <div class="products-list"></div>
+        </div>
+    </main>
+
+    <!-- JAVASCRIPT -->
+    <script src="script.js"></script>
+</body>
+</html>
